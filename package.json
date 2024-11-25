@@ -1,0 +1,28 @@
+{
+  "name": "odin-nodejs-authentication-basics",
+  "version": "1.0.0",
+  "description": "https://www.theodinproject.com/lessons/node-path-nodejs-authentication-basics",
+  "main": "index.js",
+  "scripts": {
+    "dev": "node --watch app.mjs"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@eslint/js": "^9.15.0",
+    "eslint": "^9.15.0",
+    "eslint-config-prettier": "^9.1.0",
+    "globals": "^15.12.0",
+    "prettier": "^3.3.3"
+  },
+  "dependencies": {
+    "dotenv": "^16.4.5",
+    "ejs": "^3.1.10",
+    "express": "^4.21.1",
+    "express-session": "^1.18.1",
+    "passport": "^0.7.0",
+    "passport-local": "^1.0.0",
+    "pg": "^8.13.1"
+  }
+}
