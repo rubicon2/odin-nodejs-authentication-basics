@@ -2,6 +2,19 @@
 <html lang="en">
 <%- include('partials/head.ejs') %>
 <body>
-  <h1>Hello world!</h1>
+  <% if (locals.user) { %>
+    <h1>Welcome back</h1>
+    <a href="/log-out">Log out</a>
+  <% } else { %>
+    <h1>Log in</h1>
+    <form action="/log-in" method="post">
+      <label for="username">Username: </label>
+      <input type="text" name="username" id="username" autocomplete="username" required>
+      <label for="password">Password: </label>
+      <input type="password" name="password" id="password" autocomplete="current-password" required>
+      <button type="submit">Log In</button>
+    </form>
+    <a href="/sign-up">Sign up</a>
+  <% } %>
 </body>
 </html>
