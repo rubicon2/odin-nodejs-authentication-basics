@@ -4,6 +4,7 @@ import express from 'express';
 import session from 'express-session';
 import passport from 'passport';
 import passportLocal from 'passport-local';
+import connectPgSimple from 'connect-pg-simple';
 import 'dotenv/config';
 
 const PORT = process.env.PORT;
@@ -58,8 +59,14 @@ passport.deserializeUser(async (id, done) => {
 const app = express();
 app.set('view engine', 'ejs');
 
+const pgStore = new connectPgSimple(session);
+
 app.use(
   session({
+    store: new pgStore({
+      pool,
+      tableName: 'session',
+    }),
     secret: SECRET,
     resave: false,
     saveUninitialized: false,
