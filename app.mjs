@@ -122,7 +122,7 @@ app.post(
 );
 
 app.use((error, req, res, next) => {
-  res.send(error);
+  res.send(error.message);
 });
 
 app.listen(PORT, () => console.log('app listening on port', PORT));
