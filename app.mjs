@@ -4,6 +4,8 @@ import express from 'express';
 import session from 'express-session';
 import passport from 'passport';
 import passportLocal from 'passport-local';
+import bcryptjs from 'bcryptjs';
+const { hash, compare } = bcryptjs;
 import connectPgSimple from 'connect-pg-simple';
 import 'dotenv/config';
 
@@ -29,7 +31,9 @@ passport.use(
       if (!user) {
         return done(null, false, { message: 'Incorrect username' });
       }
-      if (user.password !== password) {
+
+      const match = await compare(password, user.password);
+      if (!match) {
         return done(null, false, { message: 'Incorrect password' });
       }
       return done(null, user);
@@ -98,9 +102,10 @@ app.get('/log-out', (req, res, next) => {
 app.post('/sign-up', async (req, res, next) => {
   try {
     const { username, password } = req.body;
+    const hashedPassword = await hash(password, 10);
     await pool.query(
       'INSERT INTO users (username, password) VALUES ($1, $2);',
-      [username, password],
+      [username, hashedPassword],
     );
     res.redirect('/');
   } catch (error) {
