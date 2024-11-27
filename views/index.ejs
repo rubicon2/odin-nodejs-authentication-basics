@@ -3,7 +3,7 @@
 <%- include('partials/head.ejs') %>
 <body>
   <% if (locals.user) { %>
-    <h1>Welcome back</h1>
+    <h1>Welcome back, <%= user.username %>!</h1>
     <a href="/log-out">Log out</a>
   <% } else { %>
     <h1>Log in</h1>
