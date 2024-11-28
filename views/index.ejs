@@ -19,8 +19,14 @@
       <button type="submit">Log In</button>
     </form>
     <a href="/sign-up">Sign up</a>
-    <% if (locals.message) { %>
-      <p><%= message %></p>
+    <% if (locals.messages && messages.length > 0) { %>
+      <ul>
+        <% messages.forEach((message) => { %>
+          <li>
+              <%= message %>
+          </li>
+        <% }); %>
+      </ul>
     <% } %>
   <% } %>
 </body>

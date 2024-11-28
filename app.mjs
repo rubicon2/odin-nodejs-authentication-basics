@@ -5,6 +5,8 @@ import connectPgSimple from 'connect-pg-simple';
 import passport from 'passport';
 import local from 'passport-local';
 import bcryptjs from 'bcryptjs';
+import cookieParser from 'cookie-parser';
+import flash from 'connect-flash';
 import 'dotenv/config';
 
 const app = express();
@@ -40,11 +42,18 @@ passport.use(
       );
       const user = rows[0];
 
-      if (!user) done(null, false, { message: 'That username does not exist' });
+      if (!user)
+        done(null, false, {
+          type: 'login',
+          message: 'That username does not exist',
+        });
 
       const match = await bcryptjs.compare(password, user.password);
       if (!match)
-        done(null, false, { message: 'The password entered is incorrect' });
+        done(null, false, {
+          type: 'login',
+          message: 'The password entered is incorrect',
+        });
       else done(null, user);
     } catch (error) {
       done(error);
@@ -69,21 +78,13 @@ passport.deserializeUser(async (id, done) => {
 });
 
 app.use(passport.session());
+app.use(cookieParser(process.env.SECRET));
+app.use(flash());
 
+// Debug middleware.
 app.use((req, res, next) => {
   console.log('sesh:', req.session);
   console.log('user:', req.user);
-  next();
-});
-
-app.use((req, res, next) => {
-  if (req.session.messages) {
-    // If length - 1 is less than zero, set it to zero.
-    const index = req.session.messages.length - 1 || 0;
-    req.lastMessage = req.session.messages[index];
-  } else {
-    req.lastMessage = null;
-  }
   next();
 });
 
@@ -91,7 +92,7 @@ app.get('/', (req, res, next) => {
   res.render('index', {
     title: 'Some Web App',
     user: req.user,
-    message: req.lastMessage,
+    messages: req.flash('login'),
   });
 });
 
@@ -118,7 +119,7 @@ app.post(
   passport.authenticate('local', {
     successRedirect: '/',
     failureRedirect: '/',
-    failureMessage: true,
+    failureFlash: true,
   }),
 );
 
