@@ -4,7 +4,11 @@
 <body>
   <% if (locals.user) { %>
     <h1>Welcome back, <%= user.username %>!</h1>
-    <a href="/log-out">Log out</a>
+    <form action="/log-out" method="post">
+      <button type="submit">
+        Log Out
+      </button>
+    </form>
   <% } else { %>
     <h1>Log in</h1>
     <form action="/log-in" method="post">
@@ -15,6 +19,9 @@
       <button type="submit">Log In</button>
     </form>
     <a href="/sign-up">Sign up</a>
+    <% if (locals.message) { %>
+      <p><%= message %></p>
+    <% } %>
   <% } %>
 </body>
 </html>
