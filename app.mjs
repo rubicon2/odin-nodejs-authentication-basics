@@ -42,21 +42,24 @@ passport.use(
       );
       const user = rows[0];
 
-      if (!user)
-        done(null, false, {
+      if (!user) {
+        return done(null, false, {
           type: 'login',
           message: 'That username does not exist',
         });
+      }
 
       const match = await bcryptjs.compare(password, user.password);
-      if (!match)
-        done(null, false, {
+      if (!match) {
+        return done(null, false, {
           type: 'login',
           message: 'The password entered is incorrect',
         });
-      else done(null, user);
+      }
+
+      return done(null, user);
     } catch (error) {
-      done(error);
+      return done(error);
     }
   }),
 );
